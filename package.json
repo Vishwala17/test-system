@@ -16,6 +16,7 @@
     "@sap/cds": "^8.6.1",
     "@sap/cds-common-content": "^2.1.0",
     "@sap/eslint-plugin-ui5-jsdocs": "^2.0.5",
+    "@sap/xssec": "^4",
     "@sapui5/ts-types": "^1.132.0",
     "@ui5/logger": "^4.0.1",
     "@xmldom/xmldom": "^0.9.7",
@@ -27,8 +28,7 @@
     "lru-cache": "^11.0.2",
     "npmlog": "^7.0.1",
     "rimraf": "^6.0.1",
-    "uuid": "^11.0.5",
-    "@sap/xssec": "^4"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@cap-js/cds-types": "^0.9.0",
