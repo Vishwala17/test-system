@@ -1,0 +1,161 @@
+_schema-version: 3.3.0
+ID: test-system
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+  deploy_mode: html5-repo
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+        - mkdir -p resources
+modules:
+  - name: test-system-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+      readiness-health-check-type: http
+      readiness-health-check-http-endpoint: /health
+    build-parameters:
+      builder: npm
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: test-system-destination
+      - name: test-system-db
+      - name: test-system-auth
+
+  - name: test-system-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: test-system-db
+
+  - name: test-system-app-deployer
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: test-system-html5-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources/
+      requires:
+        - name: testsystemfullstackdevchallenge
+          artifacts:
+            - fullstack-dev-challenge.zip
+          target-path: resources/
+
+  - name: testsystemfullstackdevchallenge
+    type: html5
+    path: app/fullstack-dev-challenge
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm ci
+        - npm run build
+      supported-platforms:
+        []
+
+  - name: test-system-destinations
+    type: com.sap.application.content
+    requires:
+      - name: test-system-auth
+        parameters:
+          service-key:
+            name: test-system-auth-key
+      - name: test-system-html5-repo-host
+        parameters:
+          service-key:
+            name: test-system-html5-repo-host-key
+      - name: srv-api
+      - name: test-system-destination
+        parameters:
+          content-target: true
+    build-parameters:
+      no-source: true
+    parameters:
+      content:
+        instance:
+          existing_destinations_policy: update
+          destinations:
+            - Name: test-system-html5-repository
+              ServiceInstanceName: test-system-html5-repo-host
+              ServiceKeyName: test-system-html5-repo-host-key
+              sap.cloud.service: testsystem.service
+            - Name: test-system-auth
+              Authentication: OAuth2UserTokenExchange
+              ServiceInstanceName: test-system-auth
+              ServiceKeyName: test-system-auth-key
+              sap.cloud.service: testsystem.service
+
+resources:
+  - name: test-system-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      config:
+         oauth2-configuration:
+          redirect-uris:
+            - https://**.hana.ondemand.com/login/callback
+          role-collections:
+          - description: Manage Risks
+            name: test-system-${org}-${space}
+            role-template-references:
+              - $XSAPPNAME.RiskManager
+          tenant-mode: dedicated
+      service: hana
+      service-plan: hdi-shared
+  - name: test-system-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+  - name: test-system-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: test-system-${org}-${space}
+        tenant-mode: dedicated
+  - name: test-system-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            existing_destinations_policy: update
+            destinations:
+              - Name: test-system-srv-api
+                URL: ~{srv-api/srv-url}
+                Authentication: NoAuthentication
+                Type: HTTP
+                ProxyType: Internet
+                HTML5.ForwardAuthToken: true
+                HTML5.DynamicDestination: true
+              - Name: ui5
+                URL: https://ui5.sap.com
+                Authentication: NoAuthentication
+                Type: HTTP
+                ProxyType: Internet
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+          forwardAuthToken: true
+ 

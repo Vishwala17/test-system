@@ -1,0 +1,6 @@
+testId,title,description,price,currency_code,rating,createdAt,createdBy,modifiedAt,modifiedBy
+19b6f1ab-b9f9-426d-9df0-f4f5e3382ab4,Wireless Earbuds,High-quality wireless earbuds with noise cancellation,99.99,USD,5,2025-01-12 10:30:00,admin,2025-01-20 14:15:00,admin
+4c4b80d4-d2e1-47be-b7d6-0d2a45e7b1c8,Gaming Laptop,Powerful laptop for gaming with high refresh rate,1299.99,USD,5,2025-01-14 11:00:00,admin,2025-01-19 09:45:00,john_doe
+9a28b95d-42fe-4db7-92d3-4c7fa0e8f02d,4K Smart TV,Ultra HD 4K TV with HDR support and voice control,799.99,USD,5,2025-01-15 13:00:00,admin,2025-01-18 16:20:00,jane_smith
+7e9a3c5e-9d07-4c5d-9fd2-b204f9e81279,Smart Thermostat,Wi-Fi-enabled smart thermostat for home automation,149.99,USD,4,2025-01-16 12:45:00,mary_jane,2025-01-17 10:00:00,admin
+32c2f788-d8b8-43b0-b0e0-b01f237a489f,Fitness Tracker,Wearable fitness tracker with heart rate monitor,49.99,USD,4,2025-01-17 15:00:00,john_doe,2025-01-20 18:30:00,mary_jane

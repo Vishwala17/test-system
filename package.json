@@ -1,0 +1,94 @@
+{
+  "name": "test-system",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@cap-js/hana": "^1",
+    "@eslint/config-array": "^0.19.1",
+    "@eslint/object-schema": "^2.1.5",
+    "@sap-cloud-sdk/connectivity": "^3.25.0",
+    "@sap-cloud-sdk/http-client": "^3.25.0",
+    "@sap-cloud-sdk/resilience": "^3.25.0",
+    "@sap-cloud-sdk/util": "^3.25.0",
+    "@sap/cds": "^8.6.1",
+    "@sap/cds-common-content": "^2.1.0",
+    "@sap/eslint-plugin-ui5-jsdocs": "^2.0.5",
+    "@sapui5/ts-types": "^1.132.0",
+    "@ui5/logger": "^4.0.1",
+    "@xmldom/xmldom": "^0.9.7",
+    "are-we-there-yet": "^4.0.2",
+    "eslint": "^9.19.0",
+    "express": "^4",
+    "gauge": "^5.0.2",
+    "glob": "^11.0.1",
+    "lru-cache": "^11.0.2",
+    "npmlog": "^7.0.1",
+    "rimraf": "^6.0.1",
+    "uuid": "^11.0.5",
+    "@sap/xssec": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/cds-types": "^0.9.0",
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^8",
+    "sqlite3": "^5.1.7"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-fullstack-dev-challenge": "cds watch --open fullstack-dev-challenge/webapp/index.html?sap-ui-xx-viewCache=false",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+  },
+  "sapux": [
+    "app/fullstack-dev-challenge"
+  ],
+  "cds": {
+    "requires": {
+      "API_BUSINESS_PARTNER": {
+        "kind": "odata-v2",
+        "model": "srv/external/API_BUSINESS_PARTNER",
+        "credentials": {
+          "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_BUSINESS_PARTNER/",
+          "headers": {
+            "APIKey": "ERC6LCeOkdeOxmmsq68aiUBPlTnSGHYH"
+          }
+        }
+      },
+      "[development]": {
+        "auth": {
+          "kind": "mocked",
+          "users": {
+            "risk.manager@tester.sap.com": {
+              "password": "vishwala",
+              "roles": [
+                "RiskManager"
+              ]
+            },
+            "alice": {
+              "roles": [
+                "RiskManager"
+              ]
+            },
+            "bob": {
+              "roles": [
+                "RiskManager"
+              ]
+            }
+          }
+        }
+      },
+      "[production]": {
+        "db": "hana",
+        "auth": "xsuaa"
+      },
+      "html5-repo": true,
+      "destinations": true,
+      "workzone": true
+    },
+    "sql": {
+      "native_hana_associations": false
+    }
+  }
+}

@@ -1,0 +1,45 @@
+
+GET http://localhost:4004/odata/v4/dev-challenge/Tests
+
+###
+GET http://localhost:4004/odata/v4/dev-challenge/Questions
+
+
+###
+POST http://localhost:4004/odata/v4/dev-challenge/Tests(ID=a7e8f8c0-b98a-42e8-b06d-e2ec1f9a9888, IsActiveEntity=true)/assignQuestionsToTest
+Content-Type: application/json
+
+{
+
+    "questionsCount": 1
+}
+###
+ 
+POST http://localhost:4004/odata/v4/dev-challenge/Tests(ID=19b6f1ab-b9f9-426d-9df0-f4f5e3382ab4,IsActiveEntity=true)/createQuestions
+Content-Type: application/json
+
+{
+  "text": "Chemical formula for oxygen?",
+  "answer": "O2"
+}
+
+
+# POST http://localhost:4004/dev-challenge/assignQuestionsToTest
+# Content-Type: application/json 
+
+# {
+#     "ID": "b5d0329b-d9d2-4c0b-8277-34c1f0c4209a",
+#     "questionsCount": 3
+# }
+
+###
+POST http://localhost:4004/odata/v4/dev-challenge/Tests
+Content-Type: application/json
+{
+  "title": "New Test",
+  "description": "This is a new test.",
+  "price": 10.0,
+  "currency": "USD",
+  "rating": 5,
+  "supplier_ID": "supplier-id"
+}
