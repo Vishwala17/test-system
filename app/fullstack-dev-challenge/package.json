@@ -11,12 +11,12 @@
   "dependecies": {},
   "devDependencies": {
     "@sap/eslint-plugin-ui5-jsdocs": "^2.0.8",
+    "@sap/ui5-builder-webide-extension": "^1.1.9",
     "@sap/ux-ui5-tooling": "^1.16.2",
     "@sapui5/ts-types": "^1.132.0",
     "@ui5/cli": "^4.0.13",
     "eslint": "^9.19.0",
-    "ui5-task-zipper": "^3",
-    "@sap/ui5-builder-webide-extension": "^1.1.9"
+    "ui5-task-zipper": "^3"
   },
   "scripts": {
     "deploy-config": "npx -p @sap/ux-ui5-tooling fiori add deploy-config cf",
@@ -31,7 +31,13 @@
     ]
   },
   "dependencies": {
+    "@eslint/config-array": "^0.19.1",
+    "@eslint/object-schema": "^2.1.5",
+    "@xmldom/xmldom": "^0.9.7",
+    "are-we-there-yet": "^4.0.2",
+    "gauge": "^5.0.2",
     "glob": "^11.0.1",
+    "npmlog": "^7.0.1",
     "rimraf": "^6.0.1"
   }
 }
