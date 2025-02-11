@@ -91,26 +91,49 @@ modules:
             - Name: test-system-html5-repository
               ServiceInstanceName: test-system-html5-repo-host
               ServiceKeyName: test-system-html5-repo-host-key
-              sap.cloud.service: testsystem.service
+              sap.cloud.service: testsystem
             - Name: test-system-auth
               Authentication: OAuth2UserTokenExchange
               ServiceInstanceName: test-system-auth
               ServiceKeyName: test-system-auth-key
-              sap.cloud.service: testsystem.service
+              sap.cloud.service: testsystem
+
+  - name: test-system
+    type: approuter.nodejs
+    path: app/router
+    parameters:
+      keep-existing-routes: true
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: test-system-auth
+      - name: test-system-destination
+      - name: test-system-html5-runtime
+    provides:
+      - name: app-api
+        properties:
+          app-protocol: ${protocol}
+          app-uri: ${default-uri}
 
 resources:
   - name: test-system-db
     type: com.sap.xs.hdi-container
     parameters:
       config:
-         oauth2-configuration:
+        oauth2-configuration:
           redirect-uris:
             - https://**.hana.ondemand.com/login/callback
           role-collections:
-          - description: Manage Risks
-            name: test-system-${org}-${space}
-            role-template-references:
-              - $XSAPPNAME.RiskManager
+            - description: Manage Risks
+              name: test-system-${org}-${space}
+              role-template-references:
+                - $XSAPPNAME.RiskManager
           tenant-mode: dedicated
       service: hana
       service-plan: hdi-shared
@@ -158,4 +181,8 @@ resources:
           name: srv-api # must be used in xs-app.json as well
           url: ~{srv-url}
           forwardAuthToken: true
- 
+  - name: test-system-html5-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime

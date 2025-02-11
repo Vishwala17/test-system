@@ -199,6 +199,6 @@
   },
   "sap.cloud": {
     "public": true,
-    "service": "testsystem.service"
+    "service": "testsystem"
   }
 }

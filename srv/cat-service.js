@@ -7,7 +7,11 @@ module.exports = class DevChallengeService extends cds.ApplicationService {
   async init() {
     // Assign Questions to Test
     this.on('assignQuestionsToTest', 'Tests', async (req) => {
-      const { testId, questionsCount } = req.data;
+      // const { testId, questionsCount } = req.data;
+
+      const testId=req.params[0].testId;
+      console.log(req.params)
+      const { questionsCount } = req.data;
 
       if (questionsCount < 1) {
         return { message: 'The number of questions must be at least 1.' };

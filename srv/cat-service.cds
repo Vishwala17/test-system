@@ -14,7 +14,11 @@ service DevChallengeService {
         },
     ]) as projection on db.Tests
         actions {
-            action assignQuestionsToTest(testId: UUID, questionsCount : Integer)             returns String;
+            @cds.odata.bindingparameter.name: '_it'
+            @Common.SideEffects : {
+                TargetProperties: ['_it/questions']
+                }
+            action assignQuestionsToTest(questionsCount : Integer)             returns String;
             action createQuestions( questionText: String, answerText : String) returns String;
         }
 
